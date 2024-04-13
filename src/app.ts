@@ -11,6 +11,11 @@ app.use(
   })
 );
 
+app.get("/", (req, res) => {
+  return res.json({
+    message: "welcome to cdn",
+  });
+});
 
 app.post("/upload", upload, (req, res) => {
   if (!req.file || !req.locals) {
