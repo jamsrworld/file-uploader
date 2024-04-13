@@ -29,8 +29,6 @@ export const serveFile = async (req: Request, res: Response) => {
     validatePath(url);
 
     const filePath = path.join(process.cwd(), "uploads", url);
-    console.log("filePath:->", filePath);
-
     if (!existsSync(filePath)) {
       return res.status(400).json({
         message: "File not found",
