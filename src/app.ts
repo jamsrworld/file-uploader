@@ -1,7 +1,8 @@
-import express from "express";
 import cors from "cors";
+import "dotenv/config";
+import express from "express";
+import { serveFile } from "./server-file";
 import { upload } from "./upload";
-import path from "path";
 
 const app = express();
 app.use(
@@ -10,8 +11,6 @@ app.use(
   })
 );
 
-const uploadsDir = path.join(__dirname, "..", "uploads");
-app.use("/", express.static(uploadsDir));
 
 app.post("/upload", upload, (req, res) => {
   if (!req.file || !req.locals) {
@@ -21,15 +20,14 @@ app.post("/upload", upload, (req, res) => {
   const { relativeUploadDir } = req.locals;
   const { filename } = req.file;
   return res.json({
-    message: "File uploaded successfully",
-    file: {
-      name: filename,
-      url: `${relativeUploadDir}/${filename}`,
-    },
+    name: filename,
+    url: `${relativeUploadDir}/${filename}`,
   });
 });
 
-const PORT = process.env.PORT || 3000;
+app.get("*", serveFile);
+
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port http://localhost:${PORT}`);

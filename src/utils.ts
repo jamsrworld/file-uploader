@@ -27,3 +27,10 @@ export const getFileName = (file: Express.Multer.File) => {
   const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;
   return filename;
 };
+
+//! prevents directory traversal
+export const validatePath = (filename: string) => {
+  // Regular expression to match allowed characters and prevent directory traversal
+  const regex = /\.\.\//g;
+  if (regex.test(filename)) throw new Error("File not found");
+};
