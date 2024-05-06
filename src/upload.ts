@@ -43,11 +43,12 @@ export const upload = multer({
     if (
       file.mimetype == "image/png" ||
       file.mimetype == "image/jpg" ||
+      file.mimetype == "image/webp" ||
       file.mimetype == "image/jpeg"
     ) {
       cb(null, true);
     } else {
-      cb(new Error("Only .png, .jpg and .jpeg formats are allowed"));
+      cb(new Error("Only .png, .jpg, .webp and .jpeg formats are allowed"));
     }
   },
 }).single("file");
