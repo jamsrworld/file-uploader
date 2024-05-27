@@ -1,11 +1,11 @@
+import { mkdir, stat } from "fs/promises";
 import multer from "multer";
 import path from "path";
 import { getCurrentDate, getFileName } from "./utils";
-import { mkdir, stat } from "fs/promises";
 
 const UPLOADS_FOLDER_NAME = "uploads";
 
-const pathDist = path.join(__dirname, "..", UPLOADS_FOLDER_NAME);
+const pathDist = path.join(process.cwd(), UPLOADS_FOLDER_NAME);
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
