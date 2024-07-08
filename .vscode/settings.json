@@ -9,6 +9,8 @@
     },
     "explorerExclude.backup": {},
     "cSpell.words": [
+        "fileupload",
         "Plaiceholder"
-    ]
+    ],
+    "files.autoSave": "onFocusChange"
 }

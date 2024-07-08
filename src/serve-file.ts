@@ -5,7 +5,8 @@ import mimeTypes from "mime-types";
 import path from "path";
 import sharp from "sharp";
 import { number, object, string } from "zod";
-import { validatePath } from "./utils";
+import { UPLOAD_PATH_DIST } from "./config";
+import { isImageMimetype, validatePath } from "./utils";
 
 const schema = object({
   url: string().transform((val) => val.split("?")[0]),
@@ -28,7 +29,7 @@ export const serveFile = async (req: Request, res: Response) => {
 
     validatePath(url);
 
-    const filePath = path.join(process.cwd(), "uploads", url);
+    const filePath = path.join(UPLOAD_PATH_DIST, url);
     if (!existsSync(filePath)) {
       return res.status(400).json({
         message: "File not found",
@@ -42,7 +43,7 @@ export const serveFile = async (req: Request, res: Response) => {
     if (!mimeType) return res.send(fileContent);
     let imageContent = fileContent;
 
-    if (width && mimeType.startsWith("image/")) {
+    if (width && isImageMimetype(mimeType)) {
       const { width: fileWidth, height: fileHeight } = sizeOf(filePath);
       if (!fileHeight || !fileWidth) {
         return res.send(fileContent);
