@@ -7,8 +7,7 @@
   "scripts": {
     "dev": "tsx watch ./src/app.ts",
     "build": "tsup",
-    "start": "node ./dist/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./dist/app.js"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +19,6 @@
     "express-fileupload": "^1.5.0",
     "image-size": "^1.1.1",
     "mime-types": "^2.1.35",
-    "node": "^18.20.2",
     "plaiceholder": "^3.0.0",
     "sharp": "^0.33.3",
     "zod": "^3.22.4"

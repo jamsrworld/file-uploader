@@ -1,0 +1,7 @@
+services:
+  server:
+    image: adityaa72/file-uploader
+    ports:
+      - 3000:3000
+    volumes:
+      - cdn_files:/app/uploads
