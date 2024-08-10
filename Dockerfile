@@ -30,7 +30,6 @@ RUN pnpm build
 ################################################################################
 FROM base AS final
 ENV NODE_ENV=production
-USER node
 COPY package.json .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist

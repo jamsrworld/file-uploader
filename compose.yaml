@@ -1,9 +1,13 @@
 services:
   server:
-    image: adityaa72/file-uploader
+    platform: linux/amd64
+    image: adityaa72/file-uploader:latest
     build:
       context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     volumes:
       - cdn_files:/app/uploads
+volumes:
+  cdn_files:

@@ -106,6 +106,7 @@ app.post("/upload", async (req, res) => {
     }
     return res.json(data);
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: "Something went wrong" });
   }
 });
