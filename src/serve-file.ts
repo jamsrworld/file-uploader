@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { existsSync, readFileSync } from "fs";
+import { createReadStream, existsSync } from "fs";
 import sizeOf from "image-size";
 import mimeTypes from "mime-types";
 import path from "path";
@@ -24,6 +24,7 @@ export const serveFile = async (req: Request, res: Response) => {
         message: "File not found",
       });
     }
+    
     const { query, url } = data.data;
     const { w: width, q: quality = 100 } = query ?? { w: null, q: 100 };
 
@@ -36,21 +37,20 @@ export const serveFile = async (req: Request, res: Response) => {
       });
     }
 
-    const fileContent = readFileSync(filePath);
     const fileExtension = path.extname(url).substring(1);
     const mimeType = mimeTypes.lookup(fileExtension);
-
-    if (!mimeType) return res.send(fileContent);
-    let imageContent = fileContent;
+    if (!mimeType) {
+      return createReadStream(filePath).pipe(res);
+    }
 
     if (width && isImageMimetype(mimeType)) {
       const { width: fileWidth, height: fileHeight } = sizeOf(filePath);
       if (!fileHeight || !fileWidth) {
-        return res.send(fileContent);
+        return createReadStream(filePath).pipe(res);
       }
 
       const resizeWidth = Math.min(fileWidth, width);
-      let resizedImage = sharp(fileContent).resize(resizeWidth);
+      let resizedImage = sharp(filePath).resize(resizeWidth);
       switch (mimeType) {
         case "image/jpeg":
           resizedImage = resizedImage.jpeg({ quality });
@@ -64,10 +64,9 @@ export const serveFile = async (req: Request, res: Response) => {
         default:
           break;
       }
-      imageContent = await resizedImage.toBuffer();
     }
     res.set("Content-Type", mimeType);
-    res.send(imageContent);
+    createReadStream(filePath).pipe(res);
   } catch (error) {
     const { message } =
       error instanceof Error ? error : { message: "Server Error" };

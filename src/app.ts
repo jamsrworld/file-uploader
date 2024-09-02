@@ -20,13 +20,40 @@ import {
 } from "./utils";
 
 const app = express();
+app.disable("x-powered-by");
 
-// cors
 app.use(
-  cors({
-    origin: ALLOWED_ORIGINS,
+  express.json({
+    limit: "500mb",
   })
 );
+app.use(
+  express.urlencoded({
+    limit: "500mb",
+    extended: true,
+  })
+);
+
+// cors
+app.use((req, res, next) => {
+  if (req.method === "POST") {
+    cors({
+      origin: ALLOWED_ORIGINS,
+    })(req, res, next);
+  } else {
+    cors({
+      origin: "*",
+    })(req, res, next);
+  }
+});
+
+// get
+app.get("/", (_, res) => {
+  return res.json({
+    message: "welcome to cdn",
+  });
+});
+app.get("*", serveFile);
 
 // file upload
 app.use(
@@ -39,14 +66,6 @@ app.use(
     uploadTimeout: 0,
   })
 );
-
-// get
-app.get("/", (_, res) => {
-  return res.json({
-    message: "welcome to cdn",
-  });
-});
-
 const moveFile = (
   mv: (path: string, callback: (err: any) => void) => void,
   filePath: string
@@ -110,8 +129,6 @@ app.post("/upload", async (req, res) => {
     return res.status(500).json({ error: "Something went wrong" });
   }
 });
-
-app.get("*", serveFile);
 
 const PORT = process.env.PORT || 3000;
 
