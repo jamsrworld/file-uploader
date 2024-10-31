@@ -78,15 +78,16 @@ const moveFile = (
   });
 };
 
-app.post("/upload", async (req, res) => {
+app.post("/upload/:username?", async (req, res) => {
   try {
     const { files } = req;
+    const { username } = req.params;
     if (!files || !files.file) {
       return res.status(400).json({ error: "No files chosen" });
     }
     const file = files.file as fileUpload.UploadedFile;
     const { name, mimetype, mv, md5, size } = file;
-    const relativeUploadDir = getCurrentDate();
+    const relativeUploadDir = path.join(username ?? "", getCurrentDate());
     const uploadDir = path.join(UPLOAD_PATH_DIST, relativeUploadDir);
     const newFileName = getFileName(name);
 
@@ -107,7 +108,6 @@ app.post("/upload", async (req, res) => {
       if (size > MAX_IMAGE_SIZE) {
         return res.status(413).json({ error: "File is too large" });
       }
-
       const file = await readFile(uploadPath);
       const {
         base64,
