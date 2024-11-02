@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 7000:7000
+      - 5000:5000
     volumes:
       - cdn_files:/app/uploads
     env_file:
