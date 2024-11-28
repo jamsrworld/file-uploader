@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 app.get("/", (_, res) => {
   return res.json({
     message: "welcome to cdn",
-    lastUpdatedAt: "2024-10-31T10:37:27.898Z",
+    lastUpdatedAt: "2024-11-08T15:12:24.100Z",
   });
 });
 app.get("*", serveFile);
