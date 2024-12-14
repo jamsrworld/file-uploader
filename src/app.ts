@@ -12,6 +12,7 @@ import {
   UPLOAD_PATH_DIST,
 } from "./config";
 import { serveFile } from "./serve-file";
+import { getThumbHash } from "./thumbhash";
 import {
   getCurrentDate,
   getFileAbsPath,
@@ -116,12 +117,14 @@ app.post("/upload/:username?", async (req, res) => {
       } = await getPlaiceholder(file, {
         size: 10,
       });
+      const thumbhash = await getThumbHash(file);
       data = {
         ...data,
         placeholder: base64,
         width,
         height,
         format,
+        thumbhash,
       };
     }
     return res.json(data);

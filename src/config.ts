@@ -9,4 +9,5 @@ export const ALLOWED_ORIGINS = [
   /\.?jamsrworld\.dev$/,
   /\.?localhost:[0-9]+$/,
   "https://naino-shop.vercel.app",
+  "https://fx-cartt.vercel.app",
 ];
