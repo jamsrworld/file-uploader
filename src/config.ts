@@ -7,6 +7,7 @@ export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 export const ALLOWED_ORIGINS = [
   /\.?jamsrworld\.com$/,
   /\.?jamsrworld\.dev$/,
+  /\.?jamsrpay\.com$/,
   /\.?localhost:[0-9]+$/,
   "https://naino-shop.vercel.app",
   "https://fx-cartt.vercel.app",
