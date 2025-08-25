@@ -1,11 +1,12 @@
 services:
   server:
-    image: e14d9a1f4d39261c/66696c652d75706c6f61646572
-    # image: adityaa72/file-uploader
+    image: 32666dd156b17c850353b6de/66696c652d75706c6f61646572
     ports:
-      - 7000:7000
+      - 8000:8000
     volumes:
       - cdn_files:/app/uploads
+    env_file:
+    - .env
 
 volumes:
   cdn_files:
