@@ -1,8 +1,9 @@
 services:
   server:
-    image: 32666dd156b17c850353b6de/66696c652d75706c6f61646572
+    platform: linux/amd64
+    image: adityaa72/file-uploader
     ports:
-      - 8000:8000
+      - 8172:8172
     volumes:
       - cdn_files:/app/uploads
     env_file:
