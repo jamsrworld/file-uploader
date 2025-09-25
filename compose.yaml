@@ -1,7 +1,7 @@
 services:
   server:
     platform: linux/amd64
-    image: 32666dd156b17c850353b6de/66696c652d75706c6f61646572
+    image: adityaa72/file-uploader
     build:
       context: .
       dockerfile: Dockerfile

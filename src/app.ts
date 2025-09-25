@@ -5,12 +5,7 @@ import fileUpload from "express-fileupload";
 import { readFile } from "fs/promises";
 import path from "path";
 import { getPlaiceholder } from "plaiceholder";
-import {
-  ALLOWED_ORIGINS,
-  MAX_FILE_SIZE,
-  MAX_IMAGE_SIZE,
-  UPLOAD_PATH_DIST,
-} from "./config";
+import { MAX_FILE_SIZE, MAX_IMAGE_SIZE, UPLOAD_PATH_DIST } from "./config";
 import { serveFile } from "./serve-file";
 import { getThumbHash } from "./thumbhash";
 import {
@@ -37,6 +32,14 @@ app.use(
 
 // cors
 app.use((req, res, next) => {
+  const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",").map((domain) => {
+        // Escape the domain for regex
+        const escaped = domain.replace(/\./g, "\\.");
+        // Match domain and all subdomains
+        return new RegExp(`\\.?${escaped}$`);
+      })
+    : [];
   if (req.method === "POST") {
     cors({
       origin: ALLOWED_ORIGINS,
