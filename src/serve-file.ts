@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { createReadStream } from "fs";
 import fs from "fs/promises";
-import sizeOf from "image-size";
+import { imageSizeFromFile } from "image-size/fromFile";
 import mimeTypes from "mime-types";
 import path from "path";
 import sharp from "sharp";
@@ -48,13 +48,14 @@ export const serveFile = async (req: Request, res: Response) => {
     res.set("Cache-Control", "public, max-age=31536000");
 
     if (width && isImageMimetype(mimeType)) {
-      const { width: originalWidth, height: originalHeight } = sizeOf(filePath);
-      if (!originalHeight || !originalWidth) {
-        return createReadStream(filePath).pipe(res);
-      }
-
+      const { width: originalWidth, height: originalHeight } =
+        await imageSizeFromFile(filePath);
       const resizeWidth = Math.min(originalWidth, width);
-      let resizedImage = sharp(filePath).resize(resizeWidth).withMetadata();
+      let resizedImage = sharp(filePath)
+        .resize({
+          width: resizeWidth,
+        })
+        .withMetadata();
       switch (mimeType) {
         case "image/jpeg":
           resizedImage = resizedImage.jpeg({ quality });
