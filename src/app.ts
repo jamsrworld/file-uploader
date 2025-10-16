@@ -58,7 +58,7 @@ app.get("/", (_, res) => {
     lastUpdatedAt: "2024-11-08T15:12:24.100Z",
   });
 });
-app.get("*", serveFile);
+app.get("/*splat", serveFile);
 
 // file upload
 app.use(
@@ -83,7 +83,7 @@ const moveFile = (
   });
 };
 
-app.post("/upload/:username?", async (req, res) => {
+app.post("/upload{/:username}", async (req, res) => {
   try {
     const { files } = req;
     const { username } = req.params;

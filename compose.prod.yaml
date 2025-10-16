@@ -3,7 +3,7 @@ services:
     platform: linux/amd64
     image: adityaa72/file-uploader
     ports:
-      - 8172:8172
+      - 5000:5000
     volumes:
       - cdn_files:/app/uploads
     env_file:

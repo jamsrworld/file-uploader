@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
-ARG NODE_VERSION=20.12.0
-ARG PNPM_VERSION=9.6.0
+ARG NODE_VERSION=22.19.0
+ARG PNPM_VERSION=10.15.1
 
 ################################################################################
-FROM --platform=linux/amd64 node:${NODE_VERSION}-alpine AS base
+FROM node:${NODE_VERSION}-alpine AS base
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g pnpm@${PNPM_VERSION}
