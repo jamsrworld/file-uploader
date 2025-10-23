@@ -31,6 +31,7 @@ app.use(
 );
 
 // cors
+console.log("🚀 ~ ALLOWED_ORIGINS:->", process.env.ALLOWED_ORIGINS);
 app.use((req, res, next) => {
   const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(",").map((domain) => {
@@ -40,9 +41,30 @@ app.use((req, res, next) => {
         return new RegExp(`\\.?${escaped}$`);
       })
     : [];
+
   if (req.method === "POST") {
     cors({
-      origin: ALLOWED_ORIGINS,
+      origin: (origin, callback) => {
+        // ✅ 1. Allow requests with no origin (e.g., mobile apps, curl, same-origin)
+        if (!origin) {
+          return callback(null, true);
+        }
+
+        // ✅ 2. Allow localhost on any port
+        if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+          return callback(null, true);
+        }
+
+        // ✅ 3. Allow origins matching any regex in ALLOWED_ORIGINS
+        const allowed = ALLOWED_ORIGINS.some((regex) => regex.test(origin));
+        if (allowed) {
+          return callback(null, true);
+        }
+
+        // ❌ 4. Otherwise, block
+        console.warn("❌ CORS rejected origin:", origin);
+        return callback(new Error("Not allowed by CORS"));
+      },
     })(req, res, next);
   } else {
     cors({
